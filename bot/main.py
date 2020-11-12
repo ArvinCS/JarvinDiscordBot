@@ -71,13 +71,13 @@ async def on_message(message):
         if message.author.bot:
             return None
         print("ig")
-        html = requests.get("https://www.instagram.com/p/CHSY_kMnVec/").text
+        html = requests.get("https://www.instagram.com/p/CHSY_kMnVec/").content.decode('utf-8')
         soup = BeautifulSoup(html, 'html.parser')
 
         video_url = soup.find("meta", property="og:video")['content']
 
         await message.delete()
-        await message.channel.send(video_url)
+        await message.channel.send(html[:1888])
         # await message.channel.send(f"{message.author.name} sent {video_url}")
 
 client.run(token)
