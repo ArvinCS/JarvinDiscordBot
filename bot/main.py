@@ -77,7 +77,7 @@ async def on_message(message):
         video_url = soup.find("meta", property="og:video")['content']
 
         await message.delete()
-        await message.channel.send(html[:1888])
+        await message.channel.send(html[1888:])
         # await message.channel.send(f"{message.author.name} sent {video_url}")
 
 client.run(token)
