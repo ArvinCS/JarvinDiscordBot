@@ -70,7 +70,7 @@ async def on_message(message):
         if message.author.bot:
             return None
         print("ig")
-        html = requests.get(message.content).content.decode('utf-8')
+        html = requests.get(message.content).content.decode()
         
         # print(html)
         video_url = re.search(r'\<meta property\=\"og\:video\"[\s]content\=\"(.+?)\"[\s]\/\>', html).group(1)
