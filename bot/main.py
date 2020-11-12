@@ -70,7 +70,7 @@ async def on_message(message):
         if message.author.bot:
             return None
         print("ig")
-        html = requests.get(message.content).c
+        html = requests.get(message.content).content.decode('utf-8')
         
         # print(html)
         video_url = re.search(r'property\=\"(\w+\:)video\"[\s]?content\=\"(.+?)\"[\s]?\/\>', html).group(2)
