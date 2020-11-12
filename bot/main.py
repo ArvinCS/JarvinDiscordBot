@@ -27,7 +27,7 @@ async def clear(ctx, amount=3) :
 
 @client.event
 async def on_message(message):
-    if re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
+    if re.match(r'^[https:|http:][\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
         if message.author.bot:
             return None
         # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
