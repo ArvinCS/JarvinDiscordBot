@@ -65,4 +65,4 @@ async def on_message(message):
         # with open(filename + '.mp4', 'wb') as f: 
         #     await message.channel.send(file=discord.File(f, 'meme.mp4'))
 
-client.run('MjYwMzMxNTE2Mjc2NjM3Njk3.WFeing.MPJWONitvSE-o5NmqxdhiCQhVnI')
+client.run('MjYwMzMxNTE2Mjc2NjM3Njk3.WFeing.UQNZoymVsSQt-OHBNVwsxfPhgSs')
