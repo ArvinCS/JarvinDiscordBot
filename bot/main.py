@@ -27,9 +27,11 @@ async def clear(ctx, amount=3) :
 
 @client.event
 async def on_message(message):
+    print(message.content)
     if re.match(r'^[https:|http:][\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
         if message.author.bot:
             return None
+        print("fb")
         # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
         html = requests.get(message.content).content.decode('utf-8')
 
@@ -67,6 +69,7 @@ async def on_message(message):
     elif re.match(r'[https:|http:][\/][\/]www\.([^\/]+[\.])*instagram\.com\/p\/(\w+)', message.content):
         if message.author.bot:
             return None
+        print("ig")
         html = requests.get(message.content).content.decode('utf-8')
         
         video_url = re.search(rf'\<meta property\=\"og\:video\"[\s]content\=\"(.+?)\"[\s]\/\>', html).group(1)
