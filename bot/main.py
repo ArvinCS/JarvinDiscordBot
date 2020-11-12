@@ -51,7 +51,7 @@ async def on_message(message):
             video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
 
         await message.delete()
-        await message.channel.send(f"{video_url} from {message.author.name}")
+        await message.channel.send(f"{message.author.name} sent {video_url}")
         # file_size_request = requests.get(video_url, stream=True)
         # file_size = int(file_size_request.headers['Content-Length'])
         # block_size = 1024
@@ -64,5 +64,14 @@ async def on_message(message):
         # t.close()
         # with open(filename + '.mp4', 'wb') as f: 
         #     await message.channel.send(file=discord.File(f, 'meme.mp4'))
+    elif re.match(r'[https:|http:][\/][\/]www\.([^\/]+[\.])*instagram\.com\/p\/(\w+)', message.content):
+        if message.author.bot:
+            return None
+        html = requests.get(message.content).content.decode('utf-8')
+        
+        video_url = re.search(rf'\<meta property\=\"og\:video\"[\s]content\=\"(.+?)\"[\s]\/\>', html).group(1)
+
+        await message.delete()
+        await message.channel.send(f"{message.author.name} sent {video_url}")
 
 client.run(token)
