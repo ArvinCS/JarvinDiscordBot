@@ -70,10 +70,10 @@ async def on_message(message):
         if message.author.bot:
             return None
         print("ig")
-        html = requests.get(message.content).content.decode()
+        html = requests.get(message.content).c
         
         # print(html)
-        video_url = re.search(r'\<meta property\=\"og\:video\"[\s]content\=\"(.+?)\"[\s]\/\>', html).group(1)
+        video_url = re.search(r'property\=\"(\w+\:)video\"[\s]?content\=\"(.+?)\"[\s]?\/\>', html).group(2)
 
         await message.delete()
         await message.channel.send(video_url)
