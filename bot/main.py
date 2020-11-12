@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 import os
+import re
+import requests
+from tqdm import tqdm
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
@@ -22,5 +25,44 @@ async def whoami(ctx) :
 async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
 
+@client.event
+async def on_message(message):
+    if re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
+        if message.author.bot:
+            return None
+        # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
+        html = requests.get(message.content).content.decode('utf-8')
 
-client.run(token)
+        _qualityhd = re.search('hd_src:"https', html)
+        _qualitysd = re.search('sd_src:"https', html)
+        _hd = re.search('hd_src:null', html)
+        _sd = re.search('sd_src:null', html)
+
+        list = []
+        _thelist = [_qualityhd, _qualitysd, _hd, _sd]
+        for id,val in enumerate(_thelist):
+            if val != None:
+                list.append(id)
+        
+        video_url = ""
+        if 0 in list:
+            video_url = re.search(rf'hd_src:"(.+?)"', html).group(1)
+        elif 1 in list:
+            video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
+
+        await message.delete()
+        await message.channel.send(f"{video_url} from {message.author.name}")
+        # file_size_request = requests.get(video_url, stream=True)
+        # file_size = int(file_size_request.headers['Content-Length'])
+        # block_size = 1024
+        # filename = result.group(3)
+        # t = tqdm(total=file_size, unit='B', unit_scale=True, desc=filename, ascii=True)
+        # with open(filename + '.mp4', 'wb') as f:
+        #     for data in file_size_request.iter_content(block_size):
+        #         t.update(len(data))
+        #         f.write(data)
+        # t.close()
+        # with open(filename + '.mp4', 'wb') as f: 
+        #     await message.channel.send(file=discord.File(f, 'meme.mp4'))
+
+client.run('MjYwMzMxNTE2Mjc2NjM3Njk3.WFeing.MPJWONitvSE-o5NmqxdhiCQhVnI')
