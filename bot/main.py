@@ -73,7 +73,7 @@ async def on_message(message):
         html = requests.get(message.content).content.decode('utf-8')
         
         # print(html)
-        # video_url = re.search(rf'\<meta property\=\"og\:video\"[\s]content\=\"(.+?)\"[\s]\/\>', html).group(1)
+        video_url = re.search(rf'<meta property="og:video"[\s]content="(.+?)"[\s]/>', html).group(1)
 
         await message.delete()
         await message.channel.send(html)
