@@ -28,7 +28,7 @@ async def clear(ctx, amount=3) :
 @client.event
 async def on_message(message):
     print(message.content)
-    if re.match(r'^[https:|http:][\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
+    if re.match(r'^(https:|http:)[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content):
         if message.author.bot:
             return None
         print("fb")
@@ -66,7 +66,7 @@ async def on_message(message):
         # t.close()
         # with open(filename + '.mp4', 'wb') as f: 
         #     await message.channel.send(file=discord.File(f, 'meme.mp4'))
-    elif re.match(r'[https:|http:][\/][\/]www\.([^\/]+[\.])*instagram\.com\/p\/(\w+)', message.content):
+    elif re.match(r'(https:|http:)[\/][\/]www\.([^\/]+[\.])*instagram\.com\/p\/(\w+)', message.content):
         if message.author.bot:
             return None
         print("ig")
