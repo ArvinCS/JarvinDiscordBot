@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 import re
 import requests
+from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 client = commands.Bot(command_prefix="!")
@@ -70,10 +71,10 @@ async def on_message(message):
         if message.author.bot:
             return None
         print("ig")
-        html = requests.get(message.content).content.decode('utf-8')
-        
-        # print(html)
-        video_url = re.search(r'property\=\"(\w+\:)video\"[\s]?content\=\"(.+?)\"[\s]?\/\>', html).group(2)
+        html = requests.get("https://www.instagram.com/p/CHSY_kMnVec/").text
+        soup = BeautifulSoup(html, 'html.parser')
+
+        video_url = soup.find("meta", property="og:video")['content']
 
         await message.delete()
         await message.channel.send(video_url)
