@@ -76,7 +76,7 @@ async def on_message(message):
         video_url = re.search(rf'<meta property="og:video"[\s]content="(.+?)"[\s]/>', html).group(1)
 
         await message.delete()
-        await message.channel.send(html)
+        await message.channel.send(video_url)
         # await message.channel.send(f"{message.author.name} sent {video_url}")
 
 client.run(token)
