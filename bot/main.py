@@ -42,6 +42,7 @@ async def nhentai(ctx, id=696969):
             maxPage = int(div.find("span").text.strip())
             break
     
+    print(maxPage)
     raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
     soup = BeautifulSoup(raw, 'html.parser')
 
