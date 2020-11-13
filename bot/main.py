@@ -54,7 +54,7 @@ async def nhentai(ctx, id=190105, public=True):
     await message.add_reaction("▶️")
 
     def check(reaction, user):
-        return reaction.message == message and (public or user == ctx.author) and str(reaction.emoji) in ["◀️", "▶️"]
+        return reaction.message == message and (not user.bot) and (public or user == ctx.author) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
         try:
@@ -69,8 +69,6 @@ async def nhentai(ctx, id=190105, public=True):
                 cover = soup.find("section", {'id': 'image-container'})
                 cover_url = cover.find("img")['src']
                 
-                print(cover)
-                print(cover_url)
                 await message.edit(content=cover_url)
                 await message.remove_reaction(reaction, user)
 
