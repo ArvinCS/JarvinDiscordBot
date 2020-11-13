@@ -71,7 +71,7 @@ async def nhentai(ctx, id=696969):
                 
                 print(cover)
                 print(cover_url)
-                await message.edit(cover_url)
+                await message.edit(content=cover_url)
                 await message.remove_reaction(reaction, user)
 
             elif str(reaction.emoji) == "◀️" and page > 1:
@@ -83,7 +83,7 @@ async def nhentai(ctx, id=696969):
                 cover = soup.find("section", {'id': 'image-container'})
                 cover_url = cover.find("img")['src']
                 
-                await message.edit(cover_url)
+                await message.edit(content=cover_url)
                 await message.remove_reaction(reaction, user)
             else:
                 await message.remove_reaction(reaction, user)
