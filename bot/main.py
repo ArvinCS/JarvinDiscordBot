@@ -53,7 +53,7 @@ def findAnime(title):
     return json
 
 @client.command(name="anime")
-async def anime(ctx, title):
+async def anime(ctx, *, title):
     json = None
     found = True
     print(title)
