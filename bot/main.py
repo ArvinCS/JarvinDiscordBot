@@ -53,6 +53,10 @@ async def topAnime(ctx, start=1):
 
             if str(reaction.emoji) == "▶️" and start+20 <= 1000:
                 start += 20
+
+                raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
+                soup = BeautifulSoup(raw,'html.parser')
+                topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
                 embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
                 cnt = 0
                 for h3 in topList:
@@ -65,6 +69,10 @@ async def topAnime(ctx, start=1):
 
             elif str(reaction.emoji) == "◀️" and start-20 >= 1:
                 start -= 20
+
+                raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
+                soup = BeautifulSoup(raw,'html.parser')
+                topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
                 embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
                 cnt = 0
                 for h3 in topList:
