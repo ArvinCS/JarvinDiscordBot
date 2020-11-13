@@ -5,6 +5,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+import random
+import json
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
@@ -25,6 +27,16 @@ async def whoami(ctx) :
 @client.command()
 async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
+
+@client.command(name="nhentai")
+async def nhentai(ctx, id=696969):
+    # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
+    raw = requests.get(f"https://nhentai.net/g/{id}")
+    print(raw.content.decode('utf-8'))
+    soup = BeautifulSoup(raw, 'html.parser')
+
+    cover = soup.find("div", {'id': 'cover'})
+    message = await ctx.send(cover.find("img")['data-src'])
 
 @client.command(name="topanime")
 async def topAnime(ctx, start=1):
@@ -206,4 +218,4 @@ async def on_message(message):
         await client.process_commands(message)
 
 # print(findAnime("Grand Blue"))
-client.run(token)
+# client.run(token)
