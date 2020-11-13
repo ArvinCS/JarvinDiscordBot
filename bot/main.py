@@ -43,7 +43,7 @@ async def topAnime(ctx, start=1):
     def check(reaction, user):
         return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
-    message = await ctx.send(embedPage)
+    message = await ctx.send(embed=embedPage)
     await message.add_reaction("◀️")
     await message.add_reaction("▶️")
 
