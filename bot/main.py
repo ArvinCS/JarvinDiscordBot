@@ -55,14 +55,14 @@ def findAnime(title):
 
 @client.command(name="anime")
 async def anime(ctx, title):
+    json = None
     found = True
     try:
-        entry,title,url = FindAnime(title)
+        json = FindAnime(title)
     except:
         found = False
     
     if found:
-        json = findAnime(title)
         await ctx.send(f"Anime: {json['title']}\nEpisodes: {json['episodes']}")
     else:
         await ctx.send("The anime isn't exist!")
