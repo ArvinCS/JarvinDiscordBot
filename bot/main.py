@@ -41,6 +41,7 @@ def findAnime(title):
     json =  {
         'title': anime.find("h1", {'class': 'title-name h1_bold_none'}).text,
         'url': anime_url,
+        'thumbnail': anime.find("img", {'itemprop': 'image'})['data-src'],
         'description': anime.find("p", {'itemprop': 'description'}).text
     }
 
@@ -65,6 +66,7 @@ async def anime(ctx, *, title):
     
     if found:
         embedPage = discord.Embed(title=json['title'], description=json['description'], color=0x00ff00)
+        embedPage.set_thumbnail(json['thumbnail'])
         embedPage.add_field(name="Episodes", value=json['episodes'], inline=False)
         embedPage.add_field(name="Duration", value=json['duration'], inline=False)
         embedPage.add_field(name="Source", value=json['source'], inline=False)
