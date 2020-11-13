@@ -39,7 +39,7 @@ async def nhentai(ctx, id=696969):
 
     for div in soup.find_all("div", {'class': 'tag-container field-name'}):
         if div.text.strip() == "Pages:":
-            maxPage = div.find("span").text
+            maxPage = int(div.find("span").text.strip())
             break
     
     raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
