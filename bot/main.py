@@ -44,7 +44,7 @@ def findAnime(title):
     }
 
     # print(raw)
-    for attr in re.findall(r'\<div[\s]+class\=\"spaceit\"\>[\s\n]+\<span[\s]+class\=\"dark_text\"\>(\w+)\:\<\/span\>[\s\n]+(\d+)[\s\n]+\<\/div\>', raw):
+    for attr in re.findall(r'\<div.+\>[\s\n]+\<span[\s]+class\=\"dark_text\"\>(\w+)\:\<\/span\>[\s\n]+(.+?)[\s\n]+\<\/div\>', raw):
         # print(attr)
         # print(attr[0] + " -> " + attr[1])
         json[attr[0].lower()] = attr[1]
@@ -58,12 +58,12 @@ async def anime(ctx, title):
     found = True
     print(title)
     try:
-        json = FindAnime(title)
+        json = findAnime(title)
     except:
         found = False
     
     if found:
-        await ctx.send(f"Anime: {json['title']}\nEpisodes: {json['episodes']}")
+        await ctx.send(f"Anime: {json['title']}\nEpisodes: {json['episodes']}\nDuration: {json['duration']}")
     else:
         await ctx.send("The anime isn't exist!")
     
@@ -126,5 +126,5 @@ async def on_message(message):
     else:
         await client.process_commands(message)
 
-# findAnime("Grand Blue")
+# print(findAnime("Grand Blue"))
 client.run(token)
