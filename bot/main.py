@@ -26,6 +26,64 @@ async def whoami(ctx) :
 async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
 
+@client.command(name="topanime")
+async def topAnime(ctx, start=1):
+    raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
+    soup = BeautifulSoup(raw,'html.parser')
+    topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+
+    embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
+    cnt = 0
+    for h3 in topList:
+        cnt += 1
+        embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="", inline=False)
+        if cnt <= 20:
+            break
+    
+    def check(reaction, user):
+        return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+
+    message = await ctx.send(embedPage)
+    await message.add_reaction("◀️")
+    await message.add_reaction("▶️")
+
+    while True:
+        try:
+            reaction, user = await ctx.wait_for("reaction_add", timeout=300, check=check)
+
+            if str(reaction.emoji) == "▶️" and start+20 <= 1000:
+                start += 20
+                embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
+                cnt = 0
+                for h3 in topList:
+                    cnt += 1
+                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="", inline=False)
+                    if cnt <= 20:
+                        break
+                await message.edit(embedPage)
+                await message.remove_reaction(reaction, user)
+
+            elif str(reaction.emoji) == "◀️" and start-20 >= 1:
+                start -= 20
+                embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
+                cnt = 0
+                for h3 in topList:
+                    cnt += 1
+                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="", inline=False)
+                    if cnt <= 20:
+                        break
+                await message.edit(embedPage)
+                await message.remove_reaction(reaction, user)
+
+            else:
+                await message.remove_reaction(reaction, user)
+                # removes reactions if the user tries to go forward on the last page or
+                # backwards on the first page
+        except:
+            await message.delete()
+            break
+            # ending the loop if user doesn't react after x seconds
+
 def findAnime(title):
     search = title.replace(' ', '%20')
 
