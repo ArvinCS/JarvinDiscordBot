@@ -125,5 +125,5 @@ async def on_message(message):
     else:
         await client.process_commands(message)
 
-findAnime("Grand Blue")
-# client.run(token)
+# findAnime("Grand Blue")
+client.run(token)
