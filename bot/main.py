@@ -29,7 +29,7 @@ async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
 
 @client.command(name="nhentai")
-async def nhentai(ctx, id=696969):
+async def nhentai(ctx, id=696969, public=True):
     # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
     page = 1
     maxPage = 30
@@ -55,7 +55,7 @@ async def nhentai(ctx, id=696969):
     await message.add_reaction("▶️")
 
     def check(reaction, user):
-        return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+        return (public or user == ctx.author) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
         try:
