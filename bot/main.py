@@ -57,10 +57,10 @@ async def topAnime(ctx, start=1):
                 cnt = 0
                 for h3 in topList:
                     cnt += 1
-                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="", inline=False)
+                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="-------------", inline=False)
                     if cnt >= 20:
                         break
-                await message.edit(embedPage)
+                await message.edit(embed=embedPage)
                 await message.remove_reaction(reaction, user)
 
             elif str(reaction.emoji) == "◀️" and start-20 >= 1:
@@ -69,10 +69,10 @@ async def topAnime(ctx, start=1):
                 cnt = 0
                 for h3 in topList:
                     cnt += 1
-                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="", inline=False)
+                    embedPage.add_field(name=f"{cnt}.{h3.find('a').text}", value="-------------", inline=False)
                     if cnt >= 20:
                         break
-                await message.edit(embedPage)
+                await message.edit(embed=embedPage)
                 await message.remove_reaction(reaction, user)
 
             else:
