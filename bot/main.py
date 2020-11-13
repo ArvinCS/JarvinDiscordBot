@@ -40,7 +40,8 @@ def findAnime(title):
 
     json =  {
         'title': anime.find("h1", {'class': 'title-name h1_bold_none'}).text,
-        'url': anime_url
+        'url': anime_url,
+        'description': anime.find("p", {'itemprop': 'description'}).text
     }
 
     # print(raw)
@@ -63,7 +64,11 @@ async def anime(ctx, *, title):
         found = False
     
     if found:
-        await ctx.send(f"Anime: {json['title']}\nEpisodes: {json['episodes']}\nDuration: {json['duration']}")
+        embedPage = discord.Embed(title=json['title'], description=json['description'], color=0x00ff00)
+        embedPage.add_field(name="Episodes", value=json['episodes'], inline=False)
+        embedPage.add_field(name="Duration", value=json['duration'], inline=False)
+        embedPage.add_field(name="Source", value=json['source'], inline=False)
+        await ctx.send(embed=embedPage)
     else:
         await ctx.send("The anime isn't exist!")
     
@@ -127,4 +132,4 @@ async def on_message(message):
         await client.process_commands(message)
 
 # print(findAnime("Grand Blue"))
-client.run(token)
+# client.run(token)
