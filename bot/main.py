@@ -66,7 +66,8 @@ async def anime(ctx, *, title):
     
     if found:
         embedPage = discord.Embed(title=json['title'], description=json['description'], color=0x00ff00)
-        embedPage.set_thumbnail(url=json['thumbnail'])
+        embedPage.set_image(url=json['thumbnail'])
+        # embedPage.set_thumbnail(url=json['thumbnail'])
         embedPage.add_field(name="Episodes", value=json['episodes'], inline=False)
         embedPage.add_field(name="Duration", value=json['duration'], inline=False)
         embedPage.add_field(name="Source", value=json['source'], inline=False)
