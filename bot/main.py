@@ -32,10 +32,10 @@ async def clear(ctx, amount=3) :
 async def nhentai(ctx, id=696969):
     # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
     raw = requests.get(f"https://nhentai.net/g/{id}")
-    print(raw.content.decode('utf-8'))
     soup = BeautifulSoup(raw, 'html.parser')
 
     cover = soup.find("div", {'id': 'cover'})
+    print(cover)
     message = await ctx.send(cover.find("img")['data-src'])
 
 @client.command(name="topanime")
