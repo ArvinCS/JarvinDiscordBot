@@ -31,12 +31,66 @@ async def clear(ctx, amount=3) :
 @client.command(name="nhentai")
 async def nhentai(ctx, id=696969):
     # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
+    page = 1
+    maxPage = 0
+
     raw = requests.get(f"https://nhentai.net/g/{id}").content.decode('utf-8')
     soup = BeautifulSoup(raw, 'html.parser')
 
-    cover = soup.find("div", {'id': 'cover'})
-    print(cover)
-    message = await ctx.send(cover.find("img")['data-src'])
+    for div in soup.find_all("div", {'class': 'tag-container field-name'}):
+        if div.text.strip() == "Pages:":
+            maxPage = div.find("span").text
+            break
+    
+    raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
+    soup = BeautifulSoup(raw, 'html.parser')
+
+    cover = soup.find("section", {'id': 'image-container'})
+    cover_url = cover.find("img")['src']
+    
+    message = await ctx.send(cover_url)
+
+    await message.add_reaction("◀️")
+    await message.add_reaction("▶️")
+
+    while True:
+        try:
+            reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
+
+            if page == 1:
+                page -= 1
+                message = await ctx.send(cover.find("img")['data-src'])
+            elif str(reaction.emoji) == "▶️" and page < maxPage:
+                page += 1
+
+                raw = requests.get(f"https://nhentai.net/g/{id}/{page}").content.decode('utf-8')
+                soup = BeautifulSoup(raw, 'html.parser')
+
+                cover = soup.find("section", {'id': 'image-container'})
+                cover_url = cover.find("img")['src']
+                
+                await message.edit(cover_url)
+                await message.remove_reaction(reaction, user)
+
+            elif str(reaction.emoji) == "◀️" and page > 1:
+                page -= 1
+
+                raw = requests.get(f"https://nhentai.net/g/{id}/{page}").content.decode('utf-8')
+                soup = BeautifulSoup(raw, 'html.parser')
+
+                cover = soup.find("section", {'id': 'image-container'})
+                cover_url = cover.find("img")['src']
+                
+                await message.edit(cover_url)
+                await message.remove_reaction(reaction, user)
+            else:
+                await message.remove_reaction(reaction, user)
+                # removes reactions if the user tries to go forward on the last page or
+                # backwards on the first page
+        except:
+            await message.delete()
+            break
+            # ending the loop if user doesn't react after x seconds
 
 @client.command(name="topanime")
 async def topAnime(ctx, start=1):
