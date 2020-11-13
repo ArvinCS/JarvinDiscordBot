@@ -69,6 +69,8 @@ async def nhentai(ctx, id=696969):
                 cover = soup.find("section", {'id': 'image-container'})
                 cover_url = cover.find("img")['src']
                 
+                print(cover)
+                print(cover_url)
                 await message.edit(cover_url)
                 await message.remove_reaction(reaction, user)
 
