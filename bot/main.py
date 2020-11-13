@@ -11,7 +11,7 @@ token = os.getenv("DISCORD_BOT_TOKEN")
 
 @client.event
 async def on_ready() :
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game("Listening to !help"))
+    await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("I'm online")
 
 @client.command()
@@ -52,7 +52,9 @@ async def on_message(message):
             video_url = re.search(rf'hd_src:"(.+?)"', html).group(1)
         elif 1 in list:
             video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
-
+        else:
+            return None
+        
         await message.delete()
         await message.channel.send(f"{message.author.name} sent {video_url}")
         # file_size_request = requests.get(video_url, stream=True)
