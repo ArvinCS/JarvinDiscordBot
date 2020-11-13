@@ -5,7 +5,6 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-from lxml import html
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
