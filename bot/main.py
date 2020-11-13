@@ -57,10 +57,7 @@ async def nhentai(ctx, id=696969):
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
 
-            if page == 1:
-                page -= 1
-                message = await ctx.send(cover.find("img")['data-src'])
-            elif str(reaction.emoji) == "▶️" and page < maxPage:
+            if str(reaction.emoji) == "▶️" and page < maxPage:
                 page += 1
 
                 raw = requests.get(f"https://nhentai.net/g/{id}/{page}").content.decode('utf-8')
