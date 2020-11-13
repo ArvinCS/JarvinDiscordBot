@@ -63,7 +63,7 @@ async def nhentai(ctx, id=696969):
             if str(reaction.emoji) == "▶️" and page < maxPage:
                 page += 1
 
-                raw = requests.get(f"https://nhentai.net/g/{id}/{page}").content.decode('utf-8')
+                raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
                 soup = BeautifulSoup(raw, 'html.parser')
 
                 cover = soup.find("section", {'id': 'image-container'})
@@ -75,7 +75,7 @@ async def nhentai(ctx, id=696969):
             elif str(reaction.emoji) == "◀️" and page > 1:
                 page -= 1
 
-                raw = requests.get(f"https://nhentai.net/g/{id}/{page}").content.decode('utf-8')
+                raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
                 soup = BeautifulSoup(raw, 'html.parser')
 
                 cover = soup.find("section", {'id': 'image-container'})
@@ -87,10 +87,8 @@ async def nhentai(ctx, id=696969):
                 await message.remove_reaction(reaction, user)
                 # removes reactions if the user tries to go forward on the last page or
                 # backwards on the first page
-        except e:
-            # print(e)
-            message.edit(e)
-            # await message.delete()
+        except:
+            await message.delete()
             break
             # ending the loop if user doesn't react after x seconds
 
