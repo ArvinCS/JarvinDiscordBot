@@ -37,7 +37,7 @@ async def topAnime(ctx, start=1):
     for tr in topList:
         cnt += 1
         h3 = tr.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
-        embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
+        embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"⭐ {tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
         if cnt >= 20:
             break
     
@@ -64,7 +64,7 @@ async def topAnime(ctx, start=1):
                 for tr in topList:
                     cnt += 1
                     h3 = tr.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
-                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
+                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"⭐ {tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
                     if cnt >= 20:
                         break
                 await message.edit(embed=embedPage)
@@ -82,7 +82,7 @@ async def topAnime(ctx, start=1):
                 for tr in topList:
                     cnt += 1
                     h3 = tr.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
-                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
+                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"⭐ {tr.find('div', {'class': 'js-top-ranking-score-col di-ib al'}).find('span').text}", inline=False)
                     if cnt >= 20:
                         break
                 await message.edit(embed=embedPage)
