@@ -56,6 +56,7 @@ def findAnime(title):
 async def anime(ctx, title):
     json = None
     found = True
+    print(title)
     try:
         json = FindAnime(title)
     except:
