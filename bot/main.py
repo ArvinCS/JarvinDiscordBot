@@ -32,13 +32,13 @@ async def clear(ctx, amount=3) :
 async def nhentai(ctx, id=696969):
     # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
     page = 1
-    maxPage = 0
+    maxPage = 30
 
     raw = requests.get(f"https://nhentai.net/g/{id}").content.decode('utf-8')
     soup = BeautifulSoup(raw, 'html.parser')
 
     for div in soup.find_all("div", {'class': 'tag-container field-name'}):
-        if div.text.strip() == "Pages:":
+        if div.text.strip().startswith("Pages"):
             maxPage = int(div.find("span").text.strip())
             break
     
