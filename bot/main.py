@@ -82,6 +82,6 @@ async def on_message(message):
         await message.channel.send(html[:1888])
         # await message.channel.send(f"{message.author.name} sent {video_url}")
     else:
-        await bot.process_commands(message)
+        await client.process_commands(message)
 
 client.run(token)
