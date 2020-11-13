@@ -30,13 +30,14 @@ async def clear(ctx, amount=3) :
 async def topAnime(ctx, start=1):
     raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
     soup = BeautifulSoup(raw,'html.parser')
-    topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
-
+    topList = soup.find_all("td", {'class': 'title al va-t word-break'})
+    
     embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
     cnt = 0
-    for h3 in topList:
+    for td in topList:
         cnt += 1
-        embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value="-------------", inline=False)
+        h3 = td.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+        embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{td.find('span', {'class': 'text on score-label score-9'})}", inline=False)
         if cnt >= 20:
             break
     
@@ -56,12 +57,14 @@ async def topAnime(ctx, start=1):
 
                 raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
                 soup = BeautifulSoup(raw,'html.parser')
-                topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+                topList = soup.find_all("td", {'class': 'title al va-t word-break'})
+                # topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
                 embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
                 cnt = 0
-                for h3 in topList:
+                for td in topList:
                     cnt += 1
-                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value="-------------", inline=False)
+                    h3 = td.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{td.find('span', {'class': 'text on score-label score-9'})}", inline=False)
                     if cnt >= 20:
                         break
                 await message.edit(embed=embedPage)
@@ -72,12 +75,14 @@ async def topAnime(ctx, start=1):
 
                 raw = requests.get(f"https://myanimelist.net/topanime.php?limit={start-1}").content.decode('utf-8')
                 soup = BeautifulSoup(raw,'html.parser')
-                topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+                topList = soup.find_all("td", {'class': 'title al va-t word-break'})
+                # topList = soup.find_all("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
                 embedPage = discord.Embed(title=f"Top Anime ({start}-{start+19})", description="By rating", color=0x00ff00)
                 cnt = 0
-                for h3 in topList:
+                for td in topList:
                     cnt += 1
-                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value="-------------", inline=False)
+                    h3 = td.find("h3", {'class': 'hoverinfo_trigger fl-l fs14 fw-b anime_ranking_h3'})
+                    embedPage.add_field(name=f"{start+cnt-1}.{h3.find('a').text}", value=f"{td.find('span', {'class': 'text on score-label score-9'})}", inline=False)
                     if cnt >= 20:
                         break
                 await message.edit(embed=embedPage)
