@@ -5,6 +5,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from lxml import html
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
@@ -25,6 +26,47 @@ async def whoami(ctx) :
 @client.command()
 async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
+
+def findAnime(title):
+    search = title.replace(' ', '%20')
+
+    raw = requests.get(f"https://myanimelist.net/search/all?q={search}&cat=all").content.decode('utf-8')
+    soup = BeautifulSoup(raw,'html.parser')
+
+    page = soup.find_all("div", {'class': 'list di-t w100'})
+
+    anime_url = page[0].find("a", {'class': 'hoverinfo_trigger fw-b fl-l'})['href']
+    raw = requests.get(anime_url).content.decode('utf-8')
+    anime = BeautifulSoup(raw,'html.parser')
+
+    json =  {
+        'title': anime.find("h1", {'class': 'title-name h1_bold_none'}).text,
+        'url': anime_url
+    }
+
+    # print(raw)
+    for attr in re.findall(r'\<div[\s]+class\=\"spaceit\"\>[\s\n]+\<span[\s]+class\=\"dark_text\"\>(\w+)\:\<\/span\>[\s\n]+(\d+)[\s\n]+\<\/div\>', raw):
+        # print(attr)
+        # print(attr[0] + " -> " + attr[1])
+        json[attr[0].lower()] = attr[1]
+    
+    # print(json['episodes'])
+    return json
+
+@client.command(name="anime")
+async def anime(ctx, title):
+    found = True
+    try:
+        entry,title,url = FindAnime(title)
+    except:
+        found = False
+    
+    if found:
+        json = findAnime(title)
+        await ctx.send(f"Anime: {json['title']}\nEpisodes: {json['episodes']}")
+    else:
+        await ctx.send("The anime isn't exist!")
+    
 
 @client.event
 async def on_message(message):
@@ -84,4 +126,5 @@ async def on_message(message):
     else:
         await client.process_commands(message)
 
-client.run(token)
+findAnime("Grand Blue")
+# client.run(token)
