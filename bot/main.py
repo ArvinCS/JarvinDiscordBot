@@ -53,6 +53,9 @@ async def nhentai(ctx, id=696969):
     await message.add_reaction("◀️")
     await message.add_reaction("▶️")
 
+    def check(reaction, user):
+        return user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+    
     while True:
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
@@ -84,8 +87,10 @@ async def nhentai(ctx, id=696969):
                 await message.remove_reaction(reaction, user)
                 # removes reactions if the user tries to go forward on the last page or
                 # backwards on the first page
-        except:
-            await message.delete()
+        except e:
+            # print(e)
+            message.edit(e)
+            # await message.delete()
             break
             # ending the loop if user doesn't react after x seconds
 
