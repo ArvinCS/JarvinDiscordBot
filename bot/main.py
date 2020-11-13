@@ -132,4 +132,4 @@ async def on_message(message):
         await client.process_commands(message)
 
 # print(findAnime("Grand Blue"))
-# client.run(token)
+client.run(token)
