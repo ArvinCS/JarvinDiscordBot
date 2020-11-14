@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 import random
 import json
+import collections
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
@@ -35,14 +36,14 @@ async def covid(ctx):
 
     embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
     
-    data = {}
+    data = dict()
     for prov in jsn:
-        data[prov['attributes']['Provinsi']] = "Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
+        data[prov['attributes']['Provinsi']] = f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
 
     page = 1
     maxPage = (len(data)+4)/5
 
-    data = sorted(data)
+    data = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     keys_list = list(data.keys())
 
     for index in range((page-1)*5, min(page*5, len(data))):
