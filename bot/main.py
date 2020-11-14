@@ -42,10 +42,11 @@ async def covid(ctx):
 
     page = 1
     maxPage = (len(data)+5)/6
-
+    
     data = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     keys_list = list(data.keys())
 
+    print(f"{page} - {maxPage}")
     for index in range((page-1)*6, min(page*6, len(data))):
         embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
