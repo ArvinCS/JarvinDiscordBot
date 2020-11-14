@@ -46,7 +46,6 @@ async def covid(ctx):
     data = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     keys_list = list(data.keys())
 
-    print(f"{page} - {maxPage}")
     for index in range((page-1)*6, min(page*6, len(data))):
         embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
@@ -90,6 +89,72 @@ async def covid(ctx):
             await message.delete()
             break
             # ending the loop if user doesn't react after x seconds
+
+@client.command(name="nhentai search")
+async def nhentaiSearch(ctx, *, title):
+    oldTitle = title
+    raw = requests.get("https://nhentai.net/search/?q="+title.replace(" ", "+")).content.decode('utf-8')
+    soup = BeautifulSoup(raw, 'html.parser')
+
+    result = []
+    for gallery in soup.find_all("div", {'class': 'gallery'}):
+        json = {}
+        json['url'] = "https://nhentai.net" + gallery.find("a", {'class': 'cover'})['href']
+        json['thumbnail'] = gallery.find("img")['data-src']
+        json['title'] = gallery.find("div").text
+        result.append(json)
+
+    if(len(result) > 0):
+        page = 1
+
+        embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
+        embedPage.set_image(url=result[page-1]['thumbnail'])
+        embedPage.add_field(name="Title", value=result[page-1]['title'])
+        embedPage.add_field(name="Code", value=result[page-1]['url'][-7:-2])
+
+        message = await ctx.send(embed=embedPage)
+
+        await message.add_reaction("◀️")
+        await message.add_reaction("▶️")
+
+        def check(reaction, user):
+            return reaction.message == message and (not user.bot) and user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+        
+        while True:
+            try:
+                reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
+
+                if str(reaction.emoji) == "▶️" and page < len(result):
+                    page += 1
+
+                    embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
+                    embedPage.set_image(url=result[page-1]['thumbnail'])
+                    embedPage.add_field(name="Title", value=result[page-1]['title'])
+                    embedPage.add_field(name="Code", value=result[page-1]['url'][-7:-2])
+                    
+                    await message.edit(embed=embedPage)
+                    await message.remove_reaction(reaction, user)
+
+                elif str(reaction.emoji) == "◀️" and page > 1:
+                    page -= 1
+
+                    embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
+                    embedPage.set_image(url=result[page-1]['thumbnail'])
+                    embedPage.add_field(name="Title", value=result[page-1]['title'])
+                    embedPage.add_field(name="Code", value=result[page-1]['url'][-7:-2])
+                    
+                    await message.edit(embed=embedPage)
+                    await message.remove_reaction(reaction, user)
+                else:
+                    await message.remove_reaction(reaction, user)
+                    # removes reactions if the user tries to go forward on the last page or
+                    # backwards on the first page
+            except:
+                await message.delete()
+                break
+                # ending the loop if user doesn't react after x seconds
+    else:
+        await ctx.send("Not found!")
 
 @client.command(name="nhentai")
 async def nhentai(ctx, id=190105, public=True):
@@ -335,4 +400,4 @@ async def on_message(message):
         await client.process_commands(message)
 
 # print(findAnime("Grand Blue"))
-client.run(token)
+# client.run(token)
