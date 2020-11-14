@@ -43,7 +43,7 @@ async def covid(ctx):
     maxPage = (len(data)+4)/5
 
     data = sorted(data)
-    keys_list = list(data)
+    keys_list = list(data.keys())
 
     for index in range((page-1)*5, min(page*5, len(data))):
         embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
