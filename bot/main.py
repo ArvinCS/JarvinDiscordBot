@@ -41,7 +41,7 @@ async def covid(ctx):
         data[prov['attributes']['Provinsi']] = f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
 
     page = 1
-    maxPage = (len(data)+5)/6
+    maxPage = int((len(data)+5)/6)
     
     data = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     keys_list = list(data.keys())
