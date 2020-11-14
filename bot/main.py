@@ -90,7 +90,7 @@ async def covid(ctx):
             break
             # ending the loop if user doesn't react after x seconds
 
-@client.command(name="nhentai search")
+@client.command(name="nsearch")
 async def nhentaiSearch(ctx, *, title):
     oldTitle = title
     raw = requests.get("https://nhentai.net/search/?q="+title.replace(" ", "+")).content.decode('utf-8')
