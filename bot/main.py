@@ -41,12 +41,12 @@ async def covid(ctx):
         data[prov['attributes']['Provinsi']] = f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
 
     page = 1
-    maxPage = (len(data)+4)/5
+    maxPage = (len(data)+5)/6
 
     data = collections.OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     keys_list = list(data.keys())
 
-    for index in range((page-1)*5, min(page*5, len(data))):
+    for index in range((page-1)*6, min(page*6, len(data))):
         embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
     message = await ctx.send(embed=embedPage)
@@ -66,7 +66,7 @@ async def covid(ctx):
 
                 embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
                 
-                for index in range((page-1)*5, min(page*5, len(data))):
+                for index in range((page-1)*6, min(page*6, len(data))):
                     embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
                 await message.edit(embed=embedPage)
@@ -76,7 +76,7 @@ async def covid(ctx):
 
                 embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
                 
-                for index in range((page-1)*5, min(page*5, len(data))):
+                for index in range((page-1)*6, min(page*6, len(data))):
                     embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
                 await message.edit(embed=embedPage)
