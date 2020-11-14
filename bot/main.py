@@ -34,10 +34,60 @@ async def covid(ctx):
     jsn = json.loads(raw)
 
     embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+    
+    data = {}
     for prov in jsn:
-        embedPage.add_field(name=prov['attributes']['Provinsi'], value=f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}")
+        data[prov['attributes']['Provinsi']] = "Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
 
-    await ctx.send(embed=embedPage)
+    page = 1
+    maxPage = (len(data)+4)/5
+
+    data = sorted(data)
+    keys_list = list(data)
+
+    for index in range((page-1)*5, min(page*5, len(data))):
+        embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
+
+    message = await ctx.send(embed=embedPage)
+
+    await message.add_reaction("◀️")
+    await message.add_reaction("▶️")
+
+    def check(reaction, user):
+        return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+    
+    while True:
+        try:
+            reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
+
+            if str(reaction.emoji) == "▶️" and page < maxPage:
+                page += 1
+
+                embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+                
+                for index in range((page-1)*5, min(page*5, len(data))):
+                    embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
+
+                await message.edit(embed=embedPage)
+                await message.remove_reaction(reaction, user)
+            elif str(reaction.emoji) == "◀️" and page > 1:
+                page -= 1
+
+                embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+                
+                for index in range((page-1)*5, min(page*5, len(data))):
+                    embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
+
+                await message.edit(embed=embedPage)
+                await message.remove_reaction(reaction, user)
+            else:
+                await message.remove_reaction(reaction, user)
+                # removes reactions if the user tries to go forward on the last page or
+                # backwards on the first page
+        except:
+            await message.delete()
+            break
+            # ending the loop if user doesn't react after x seconds
 
 @client.command(name="nhentai")
 async def nhentai(ctx, id=190105, public=True):
