@@ -28,6 +28,17 @@ async def whoami(ctx) :
 async def clear(ctx, amount=3) :
     await ctx.channel.purge(limit=amount)
 
+@client.command(name="covid")
+async def covid(ctx):
+    raw = requests.get(f"https://api.kawalcorona.com/indonesia/provinsi/").content.decode('utf-8')
+    jsn = json.loads(raw)
+
+    embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+    for prov in jsn:
+        embedPage.add_field(name=prov['attributes']['Provinsi'], value=f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}")
+
+    ctx.send(embedPage)
+
 @client.command(name="nhentai")
 async def nhentai(ctx, id=190105, public=True):
     # raw = requests.get(f"https://api.getproxylist.com/proxy?allowsHttps=1").content.decode('utf-8')
