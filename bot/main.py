@@ -110,7 +110,7 @@ async def nhentaiSearch(ctx, *, title):
         embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
         embedPage.set_image(url=result[page-1]['thumbnail'])
         embedPage.add_field(name="Title", value=result[page-1]['title'])
-        embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url'][-7:-1]).group(1))
+        embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url']).group(1))
 
         message = await ctx.send(embed=embedPage)
 
@@ -130,7 +130,7 @@ async def nhentaiSearch(ctx, *, title):
                     embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
                     embedPage.set_image(url=result[page-1]['thumbnail'])
                     embedPage.add_field(name="Title", value=result[page-1]['title'])
-                    embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url'][-7:-1]).group(1))
+                    embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url']).group(1))
                     
                     await message.edit(embed=embedPage)
                     await message.remove_reaction(reaction, user)
@@ -141,7 +141,7 @@ async def nhentaiSearch(ctx, *, title):
                     embedPage = discord.Embed(title=f"Search result ({oldTitle})", description=f"Total: {len(result)} results", color=0x00ff00)
                     embedPage.set_image(url=result[page-1]['thumbnail'])
                     embedPage.add_field(name="Title", value=result[page-1]['title'])
-                    embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url'][-7:-1]).group(1))
+                    embedPage.add_field(name="Code", value=re.match(r"https:\/\/nhentai\.net\/g\/(\d+)", result[page-1]['url']).group(1))
                     
                     await message.edit(embed=embedPage)
                     await message.remove_reaction(reaction, user)
