@@ -37,7 +37,7 @@ async def covid(ctx):
     for prov in jsn:
         embedPage.add_field(name=prov['attributes']['Provinsi'], value=f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}")
 
-    ctx.send(embedPage)
+    await ctx.send(embedPage)
 
 @client.command(name="nhentai")
 async def nhentai(ctx, id=190105, public=True):
