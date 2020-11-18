@@ -363,9 +363,9 @@ async def on_message(message):
                 list.append(id)
         
         video_url = ""
-        if 0 in list:
+        if 0 in list or 2 in list:
             video_url = re.search(rf'hd_src:"(.+?)"', html).group(1)
-        elif 1 in list:
+        elif 1 in list or 3 in list:
             video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
         else:
             return None
@@ -399,5 +399,6 @@ async def on_message(message):
     else:
         await client.process_commands(message)
 
+# print(video_url)
 # print(findAnime("Grand Blue"))
 client.run(token)
