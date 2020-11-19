@@ -19,7 +19,7 @@ async def on_ready() :
     print("I'm online")
     lastBebrasHTML = ""
 
-    checkBebras()
+    checkBebras.start()
 
 @tasks.loop(minutes=15)
 async def checkBebras():
