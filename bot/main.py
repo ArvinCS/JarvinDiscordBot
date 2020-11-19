@@ -17,29 +17,6 @@ async def on_ready() :
     await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("I'm online")
 
-    checkBebras.start()
-
-bebrashtml = ""
-
-def bebrasUpdate(raw):
-    print("check: " + bebrashtml)
-    return (bebrashtml is not "") and bebrashtml is not raw
-
-@tasks.loop(minutes=2)
-async def checkBebras():
-    channel = client.get_channel(663681693009575948)
-    raw = requests.get(f"http://bebras.or.id/v3/pengumuman-hasil-bebras-indonesia-challenge-2020/").content.decode('utf-8')
-    
-    if(bebrasUpdate(raw)):
-        await channel.send(f"Tuan Arvin, bebras sudah mengumumkan hasilnya!")
-    
-    bebrashtml = raw
-
-@checkBebras.before_loop
-async def before():
-    await client.wait_until_ready()
-    print("Finished waiting to loop")
-
 @client.command()
 async def ping(ctx) :
     await ctx.send(f"🏓 Pong with {str(round(client.latency, 2))}")
@@ -386,9 +363,9 @@ async def on_message(message):
                 list.append(id)
         
         video_url = ""
-        if 0 in list or 2 in list:
+        if 0 in list or 3 in list:
             video_url = re.search(rf'hd_src:"(.+?)"', html).group(1)
-        elif 1 in list or 3 in list:
+        elif 1 in list or 2 in list:
             video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
         else:
             return None
