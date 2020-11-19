@@ -19,7 +19,7 @@ async def on_ready() :
 
     checkBebras.start("")
 
-@tasks.loop(minutes=15)
+@tasks.loop(minutes=2)
 async def checkBebras(lastBebrasHTML):
     print("check: " + lastBebrasHTML)
     channel = client.get_channel(663681693009575948)
