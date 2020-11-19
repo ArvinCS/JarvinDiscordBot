@@ -17,18 +17,29 @@ async def on_ready() :
     await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("I'm online")
 
-    checkBebras.start("")
+    checkBebras.start()
+
+bebrashtml = ""
+
+def bebrasUpdate(raw):
+    print("check: " + bebrashtml)
+    return (bebrashtml is not "") and bebrashtml is not raw
 
 @tasks.loop(minutes=2)
-async def checkBebras(lastBebrasHTML):
-    print("check: " + lastBebrasHTML)
+async def checkBebras():
     channel = client.get_channel(663681693009575948)
     raw = requests.get(f"http://bebras.or.id/v3/pengumuman-hasil-bebras-indonesia-challenge-2020/").content.decode('utf-8')
     
-    if((lastBebrasHTML is not "") and lastBebrasHTML is not raw):
+    if(bebrasUpdate(raw)):
         await channel.send(f"Tuan Arvin, bebras sudah mengumumkan hasilnya!")
     
-    lastBebrasHTML = raw
+    bebrashtml = raw
+
+@checkBebras.before_loop
+async def before():
+    await client.wait_until_ready()
+    bebrashtml = ""
+    print("Finished waiting to loop")
 
 @client.command()
 async def ping(ctx) :
