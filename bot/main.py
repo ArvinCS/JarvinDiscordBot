@@ -38,7 +38,6 @@ async def checkBebras():
 @checkBebras.before_loop
 async def before():
     await client.wait_until_ready()
-    bebrashtml = ""
     print("Finished waiting to loop")
 
 @client.command()
