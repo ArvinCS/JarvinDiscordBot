@@ -11,22 +11,20 @@ import collections
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
-lastBebrasHTML = ""
 
 @client.event
 async def on_ready() :
     await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
     print("I'm online")
-    lastBebrasHTML = ""
 
-    checkBebras.start()
+    checkBebras.start("")
 
 @tasks.loop(minutes=15)
-async def checkBebras():
+async def checkBebras(lastBebrasHTML):
     channel = client.get_channel(663681693009575948)
     raw = requests.get(f"http://bebras.or.id/v3/pengumuman-hasil-bebras-indonesia-challenge-2020/").content.decode('utf-8')
     
-    if(lastBebrasHTML is not "" and lastBebrasHTML is not raw):
+    if((lastBebrasHTML is not "") and lastBebrasHTML is not raw):
         await channel.send(f"Tuan Arvin, bebras sudah mengumumkan hasilnya!")
     
     lastBebrasHTML = raw
