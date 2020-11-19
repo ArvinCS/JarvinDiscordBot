@@ -21,6 +21,7 @@ async def on_ready() :
 
 @tasks.loop(minutes=15)
 async def checkBebras(lastBebrasHTML):
+    print("check: " + lastBebrasHTML)
     channel = client.get_channel(663681693009575948)
     raw = requests.get(f"http://bebras.or.id/v3/pengumuman-hasil-bebras-indonesia-challenge-2020/").content.decode('utf-8')
     
