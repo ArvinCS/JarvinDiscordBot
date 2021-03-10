@@ -12,6 +12,10 @@ import collections
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
 
+initial_extensions = [
+    'instagram',
+]
+
 @client.event
 async def on_ready() :
     await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
@@ -403,4 +407,9 @@ async def on_message(message):
 # print(html)
 # print(video_url)
 # print(findAnime("Grand Blue"))
+
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        client.load_extension(extension)
+
 client.run(token)
