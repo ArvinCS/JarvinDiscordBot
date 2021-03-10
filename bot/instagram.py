@@ -51,7 +51,7 @@ class InstagramCog(commands.Cog):
 
             await ctx.send(embed=embedPage)
         else:
-            await ctx.send("The anime isn't exist!")
+            await ctx.send("The user isn't exist!")
 
 def setup(bot):
     bot.add_cog(InstagramCog(bot))
