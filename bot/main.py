@@ -14,6 +14,7 @@ token = os.getenv("DISCORD_BOT_TOKEN")
 
 initial_extensions = [
     'instagram',
+    'customchannel'
 ]
 
 @client.event
@@ -391,7 +392,6 @@ async def on_message(message):
     elif re.match(r'(https:|http:)[\/][\/]www\.([^\/]+[\.])*instagram\.com\/p\/(\w+)', message.content):
         if message.author.bot:
             return None
-        print("ig")
         html = requests.get("https://www.instagram.com/p/CHSY_kMnVec/").content.decode('utf-8')
         soup = BeautifulSoup(html, 'html.parser')
 
