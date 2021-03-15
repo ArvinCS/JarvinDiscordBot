@@ -348,11 +348,10 @@ async def anime(ctx, *, title):
 
 @client.event
 async def on_message(message):
-    print(message.content)
-    if re.match(r'^(https:|http:)[\/][\/](www|web)\.([^\/]+[\.])*facebook\.com\/(.+?)\/(posts|videos)\/(\d+)', message.content):
+    if "facebook.com" in message.content:
         if message.author.bot:
             return None
-        print("fb")
+        
         # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
         html = requests.get(message.content).content.decode('utf-8')
 
@@ -374,6 +373,9 @@ async def on_message(message):
             video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
         else:
             return None
+        
+        if video_url is None:
+            return
         
         await message.delete()
         await message.channel.send(f"{message.author.name} sent {video_url}")
