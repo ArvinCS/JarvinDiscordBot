@@ -8,18 +8,22 @@ from tqdm import tqdm
 import random
 import json
 import collections
+from discord_components import *
+import urllib.parse
 
 client = commands.Bot(command_prefix="!")
 token = os.getenv("DISCORD_BOT_TOKEN")
 
 initial_extensions = [
     'instagram',
-    'customchannel'
+    'customchannel',
+    'lyrics'
 ]
 
 @client.event
 async def on_ready() :
     await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name="!help"))
+    DiscordComponents(client)
     print("I'm online")
 
 @client.command()
@@ -353,30 +357,32 @@ async def on_message(message):
             return None
         
         # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
-        html = requests.get(message.content).content.decode('utf-8')
+        html = requests.get(message.content.replace("www", "m")).content.decode('utf-8')
 
-        _qualityhd = re.search('hd_src:"https', html)
-        _qualitysd = re.search('sd_src:"https', html)
-        _hd = re.search('hd_src:null', html)
-        _sd = re.search('sd_src:null', html)
-
-        list = []
-        _thelist = [_qualityhd, _qualitysd, _hd, _sd]
-        for id,val in enumerate(_thelist):
-            if val != None:
-                list.append(id)
+        soup = BeautifulSoup(html, 'html.parser')
         
+        videos = soup.find_all("div", {'class' : 'cc'})
+
         video_url = ""
-        if 0 in list or 3 in list:
-            video_url = re.search(rf'hd_src:"(.+?)"', html).group(1)
-        elif 1 in list or 2 in list:
-            video_url = re.search(rf'sd_src:"(.+?)"', html).group(1)
+        if len(videos) > 0:
+            link = videos[0].find_all("a")[0]['href']
+            link = urllib.parse.unquote(link).partition("src=")[2]
+            video_url = link
         else:
             return None
+        
         
         if video_url is None:
             return
         
+        # embedPage = discord.Embed(title="Video", description=f"Sent by {message.author.name}", color=0x00ff00)
+        # embedPage.set_image(url=json['thumbnail'])
+        # # embedPage.set_thumbnail(url=json['thumbnail'])
+        # embedPage.add_field(name="Episodes", value=json['episodes'], inline=False)
+        # embedPage.add_field(name="Duration", value=json['duration'], inline=False)
+        # embedPage.add_field(name="Source", value=json['source'], inline=False)
+        # await ctx.send(embed=embedPage)
+
         await message.delete()
         await message.channel.send(f"{message.author.name} sent {video_url}")
         # file_size_request = requests.get(video_url, stream=True)
