@@ -17,7 +17,7 @@ token = os.getenv("DISCORD_BOT_TOKEN")
 initial_extensions = [
     'instagram',
     'customchannel',
-    'lyrics'
+    # 'lyrics'
 ]
 
 @client.event
