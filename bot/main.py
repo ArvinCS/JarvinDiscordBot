@@ -47,7 +47,7 @@ async def covid(ctx):
     
     data = dict()
     for prov in jsn['list_data']:
-        data[prov['key']] = f"Positif: {'{0:.}'.format(prov['jumlah_kasus'])}\nMeninggal: {'{0:.}'.format(prov['jumlah_meninggal'])}\nSembuh: {'{0:.}'.format(prov['jumlah_sembuh'])}"
+        data[prov['key']] = f"Positif: {'{:,}'.format(prov['jumlah_kasus'])}\nMeninggal: {'{:,}'.format(prov['jumlah_meninggal'])}\nSembuh: {'{:,}'.format(prov['jumlah_sembuh'])}"
 
     page = 1
     maxPage = int((len(data)+5)/6)
