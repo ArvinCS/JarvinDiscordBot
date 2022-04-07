@@ -47,6 +47,7 @@ async def covid(ctx):
     
     data = dict()
     for prov in jsn['list_data']:
+        print(prov)
         data[prov['key']] = f"Positif: {prov['jumlah_kasus']}\nMeninggal: {prov['jumlah_meninggal']}\nSembuh: {prov['jumlah_sembuh']}"
 
     page = 1
