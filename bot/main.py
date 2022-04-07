@@ -292,6 +292,7 @@ async def topAnime(ctx, start=1):
                 # removes reactions if the user tries to go forward on the last page or
                 # backwards on the first page
         except:
+            print("ERROR OCCURED")
             await message.delete()
             break
             # ending the loop if user doesn't react after x seconds
