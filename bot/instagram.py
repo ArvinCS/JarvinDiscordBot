@@ -21,7 +21,7 @@ class InstagramCog(commands.Cog):
                 requests.get(url, headers=headers).text,
             ).group(1)
         )
-        print(json.dumps(data, indent=4))
+        print(data["entry_data"]["ProfilePage"][0]["graphql"]["user"])
         result =  {
             'photo': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["profile_pic_url_hd"],
             'username': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["username"],
@@ -31,7 +31,7 @@ class InstagramCog(commands.Cog):
             "following": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_follow"]["count"],
             "posts_count": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_owner_to_timeline_media"]["count"],
         }
-        
+
         return result
     
     @commands.command(name="instagram", aliases=["ig"])
