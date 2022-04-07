@@ -3,51 +3,54 @@ from discord.ext import commands, tasks
 import requests
 from bs4 import BeautifulSoup
 import re
+import json
 
 class InstagramCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     def findUser(self, id):
-        raw = requests.get(f"https://www.instagram.com/{id}/").content.decode('utf-8')
-        soup = BeautifulSoup(raw,'html.parser')
-
-        print(raw)
-
-        json =  {
-            'photo': soup.find("meta", property="og:image")['content'],
-            'username': soup.find("meta", property="og:title")['content'],
-            "url": soup.find("meta", property="og:url")['content'],
+        url = f"https://www.instagram.com/{id}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
         }
 
-        description = soup.find("meta", property="og:description")['content']
-        if(re.match(r'((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sFollowers.+?((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sFollowing.+?((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sPosts', description)):
-            groups = re.search(r'((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sFollowers.+?((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sFollowing.+?((\d{1,3},\d{3}(,\d{3})*)(\.\d*)?|\d+\.?\d*)\sPosts', description)
+        data = json.loads(
+            re.search(
+                r"<script type=\"text/javascript\">window\._sharedData = (.*});",
+                requests.get(url, headers=headers).text,
+            ).group(1)
+        )
 
-            json['followers'] = groups.group(1)
-            json['following'] = groups.group(5)
-            json['posts_count'] = groups.group(9)
+        result =  {
+            'photo': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["profile_pic_url_hd"],
+            'username': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["username"],
+            "url": url,
+            "description": "\n".join([data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["biography"], data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["external_url"]]),
+            "followers": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_followed_by"]["count"],
+            "following": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_follow"]["count"],
+            "posts_count": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_owner_to_timeline_media"]["count"],
+        }
         
-        # print(json['episodes'])
-        return json
+        return result
     
     @commands.command(name="instagram", aliases=["ig"])
     async def searchprofile(self, ctx, *, id) :
-        json = None
+        data = None
         found = True
         try:
-            json = self.findUser(id)
+            data = self.findUser(id)
         except:
             found = False
         
         if found:
             embedPage = discord.Embed(title=id, color=0x00ff00)
-            embedPage.set_image(url=json['photo'])
-            # embedPage.set_thumbnail(url=json['thumbnail'])
-            embedPage.add_field(name="URL", value=json['url'], inline=False)
-            embedPage.add_field(name="Followers", value=json['followers'], inline=False)
-            embedPage.add_field(name="Following", value=json['following'], inline=False)
-            embedPage.add_field(name="Posts", value=json['posts_count'], inline=False)
+            embedPage.set_image(url=data['photo'])
+            # embedPage.set_thumbnail(url=data['thumbnail'])
+            embedPage.add_field(name="URL", value=data['url'], inline=False)
+            embedPage.add_field(name="Followers", value=data['followers'], inline=False)
+            embedPage.add_field(name="Following", value=data['following'], inline=False)
+            embedPage.add_field(name="Posts", value=data['posts_count'], inline=False)
 
             await ctx.send(embed=embedPage)
         else:
