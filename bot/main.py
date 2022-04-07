@@ -47,7 +47,7 @@ async def covid(ctx):
     
     data = dict()
     for prov in jsn['list_data']:
-        data[prov['key']] = f"Positif: {prov['jumlah_kasus']}\nMeninggal: {prov['jumlah_meninggal']}\nSembuh: {prov['jumlah_sembuh']}"
+        data[prov['key']] = f"Positif: {'{0:.}'.format(prov['jumlah_kasus'])}\nMeninggal: {'{0:.}'.format(prov['jumlah_meninggal'])}\nSembuh: {'{0:.}'.format(prov['jumlah_sembuh'])}"
 
     page = 1
     maxPage = int((len(data)+5)/6)
@@ -70,8 +70,6 @@ async def covid(ctx):
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300.0, check=check)
             
-            print("CLICKED")
-
             if str(reaction.emoji) == '▶️' and page < maxPage:
                 page += 1
 
@@ -252,7 +250,7 @@ async def topAnime(ctx, start=1):
     while True:
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
-            print("CLICKED2")
+            
             if str(reaction.emoji) == "▶️" and start+20 <= 1000:
                 start += 20
 
