@@ -243,7 +243,7 @@ async def topAnime(ctx, start=1):
             break
     
     def check(reaction, user):
-        return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+        return (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
 
     message = await ctx.send(embed=embedPage)
     await message.add_reaction("◀️")
@@ -252,7 +252,7 @@ async def topAnime(ctx, start=1):
     while True:
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
-
+            print("CLICKED2")
             if str(reaction.emoji) == "▶️" and start+20 <= 1000:
                 start += 20
 
