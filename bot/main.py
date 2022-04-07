@@ -64,11 +64,13 @@ async def covid(ctx):
     await message.add_reaction('▶️')
 
     def check(reaction, user):
-        return reaction.message == message and (not user.bot) and str(reaction.emoji) in ['◀️', '▶️']
+        return reaction.message == message and (not user.bot) and (public or user == ctx.author) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
         try:
             reaction, user = await client.wait_for("reaction_add", timeout=300.0, check=check)
+            
+            print("CLICKED")
             
             if str(reaction.emoji) == '▶️' and page < maxPage:
                 page += 1
