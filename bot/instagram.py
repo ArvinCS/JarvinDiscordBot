@@ -21,7 +21,7 @@ class InstagramCog(commands.Cog):
                 requests.get(url, headers=headers).text,
             ).group(1)
         )
-        print(data["entry_data"]["ProfilePage"][0]["graphql"]["user"])
+        print(data["entry_data"])
         result =  {
             'photo': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["profile_pic_url_hd"],
             'username': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["username"],
