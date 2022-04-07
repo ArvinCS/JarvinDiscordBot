@@ -59,46 +59,48 @@ async def covid(ctx):
     for index in range((page-1)*6, min(page*6, len(data))):
         embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
-    message = await ctx.send(embed=embedPage)
+    buttons = [
+        Button(style=ButtonStyle.blue, label="Previous", custom_id="prv"), 
+        Button(style=ButtonStyle.blue, label="Next", custom_id="nxt")
+    ]
 
-    await message.add_reaction("◀️")
-    await message.add_reaction("▶️")
-
-    def check(reaction, user):
-        return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+    message = await ctx.send(embed=embedPage, components=buttons)
     
-    while True:
-        try:
-            reaction, user = await client.wait_for("reaction_add", timeout=300, check=check)
+    # def check(reaction, user):
+    #     return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+    
+    # while True:
+    #     try:
+    #         reaction, user = await message.wait_for_component#("button_click", timeout=300, check=check)
+            
+    #         if str(reaction.emoji) == "▶️" and page < maxPage:
+    #             page += 1
 
-            if str(reaction.emoji) == "▶️" and page < maxPage:
-                page += 1
-
-                embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+    #             embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
                 
-                for index in range((page-1)*6, min(page*6, len(data))):
-                    embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
+    #             for index in range((page-1)*6, min(page*6, len(data))):
+    #                 embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
-                await message.edit(embed=embedPage)
-                await message.remove_reaction(reaction, user)
-            elif str(reaction.emoji) == "◀️" and page > 1:
-                page -= 1
+    #             await message.edit(embed=embedPage)
+    #             await message.remove_reaction(reaction, user)
+    #         elif str(reaction.emoji) == "◀️" and page > 1:
+    #             page -= 1
 
-                embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
+    #             embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
                 
-                for index in range((page-1)*6, min(page*6, len(data))):
-                    embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
+    #             for index in range((page-1)*6, min(page*6, len(data))):
+    #                 embedPage.add_field(name=keys_list[index], value=data[keys_list[index]])
 
-                await message.edit(embed=embedPage)
-                await message.remove_reaction(reaction, user)
-            else:
-                await message.remove_reaction(reaction, user)
-                # removes reactions if the user tries to go forward on the last page or
-                # backwards on the first page
-        except:
-            await message.delete()
-            break
-            # ending the loop if user doesn't react after x seconds
+    #             await message.edit(embed=embedPage)
+    #             await message.remove_reaction(reaction, user)
+    #         else:
+    #             await message.remove_reaction(reaction, user)
+    #             # removes reactions if the user tries to go forward on the last page or
+    #             # backwards on the first page
+    #     except:
+    #         await message.delete()
+    #         break
+    #         # ending the loop if user doesn't react after x seconds
 
 @client.command(name="nsearch")
 async def nhentaiSearch(ctx, *, title):
