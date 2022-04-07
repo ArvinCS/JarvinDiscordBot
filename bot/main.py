@@ -40,14 +40,14 @@ async def clear(ctx, amount=3) :
 
 @client.command(name="covid")
 async def covid(ctx):
-    raw = requests.get(f"https://api.kawalcorona.com/indonesia/provinsi/").content.decode('utf-8')
+    raw = requests.get(f"https://data.covid19.go.id/public/api/prov.json").content.decode('utf-8')
     jsn = json.loads(raw)
 
     embedPage = discord.Embed(title=f"Data COVID-19 Indonesia", description="Berdasarkan setiap provinsi", color=0x00ff00)
     
     data = dict()
-    for prov in jsn:
-        data[prov['attributes']['Provinsi']] = f"Positif: {prov['attributes']['Kasus_Posi']}\nMeninggal: {prov['attributes']['Kasus_Meni']}\nSembuh: {prov['attributes']['Kasus_Semb']}"
+    for prov in jsn['list_data']:
+        data[prov['key']] = f"Positif: {prov['jumlah_kasus']}\nMeninggal: {prov['jumlah_meninggal']}\nSembuh: {prov['jumlah_sembuh']}"
 
     page = 1
     maxPage = int((len(data)+5)/6)
@@ -177,6 +177,7 @@ async def nhentai(ctx, id=190105, public=True):
     for div in soup.find_all("div", {'class': 'tag-container field-name'}):
         if div.text.strip().startswith("Pages"):
             maxPage = int(div.find("span").text.strip())
+            print(maxPage)
             break
     
     raw = requests.get(f"https://nhentai.net/g/{id}/{page}/").content.decode('utf-8')
@@ -208,7 +209,6 @@ async def nhentai(ctx, id=190105, public=True):
                 
                 await message.edit(content=cover_url)
                 await message.remove_reaction(reaction, user)
-
             elif str(reaction.emoji) == "◀️" and page > 1:
                 page -= 1
 
