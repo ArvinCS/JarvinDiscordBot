@@ -65,7 +65,7 @@ async def covid(ctx):
 
     def check(reaction, user):
         print(reaction.message)
-        return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+        return reaction.message.id == message.id and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
         try:
