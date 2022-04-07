@@ -64,6 +64,7 @@ async def covid(ctx):
     await message.add_reaction('▶️')
 
     def check(reaction, user):
+        print(reaction.message)
         return reaction.message == message and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
