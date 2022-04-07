@@ -64,7 +64,6 @@ async def covid(ctx):
     await message.add_reaction('▶️')
 
     def check(reaction, user):
-        print(reaction.message)
         return reaction.message.id == message.id and (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
@@ -126,7 +125,7 @@ async def nhentaiSearch(ctx, *, title):
         await message.add_reaction("▶️")
 
         def check(reaction, user):
-            return reaction.message == message and (not user.bot) and user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
+            return reaction.message.id == message.id and (not user.bot) and user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
         
         while True:
             try:
@@ -191,7 +190,7 @@ async def nhentai(ctx, id=190105, public=True):
     await message.add_reaction("▶️")
 
     def check(reaction, user):
-        return reaction.message == message and (not user.bot) and (public or user == ctx.author) and str(reaction.emoji) in ["◀️", "▶️"]
+        return reaction.message.id == message.id and (not user.bot) and user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
     
     while True:
         try:
@@ -244,7 +243,7 @@ async def topAnime(ctx, start=1):
             break
     
     def check(reaction, user):
-        return (not user.bot) and str(reaction.emoji) in ["◀️", "▶️"]
+        return reaction.message.id == message.id and (not user.bot) and user == ctx.author and str(reaction.emoji) in ["◀️", "▶️"]
 
     message = await ctx.send(embed=embedPage)
     await message.add_reaction("◀️")
