@@ -31,7 +31,7 @@ class InstagramCog(commands.Cog):
             "following": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_follow"]["count"],
             "posts_count": data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_owner_to_timeline_media"]["count"],
         }
-        
+        print(json.dumps(data, indent=4))
         return result
     
     @commands.command(name="instagram", aliases=["ig"])
