@@ -310,7 +310,7 @@ def findAnime(title):
     anime = BeautifulSoup(raw,'html.parser')
 
     json =  {
-        'title': anime.find("h1", {'class': 'title-name h1_bold_none'}).text,
+        'title': ' '.join([anime.find("h1", {'class': 'title-name h1_bold_none'}).text, ]),
         'url': anime_url,
         'thumbnail': anime.find("img", {'itemprop': 'image'})['data-src'],
         'description': anime.find("p", {'itemprop': 'description'}).text
@@ -353,21 +353,23 @@ async def on_message(message):
         if message.author.bot:
             return None
         
+        headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
+        }
         # result = re.match(r'^https:|http:[\/][\/]www\.([^\/]+[\.])*facebook\.com\/(.+?)\/posts\/(\d+)', message.content)
-        html = requests.get(message.content.replace("www", "m")).content.decode('utf-8')
+        html = requests.get(message.content.replace("www", "m"), headers=headers).content.decode('utf-8')
 
-        soup = BeautifulSoup(html, 'html.parser')
-        
-        videos = soup.find_all("div", {'class' : 'cc'})
+        video_url = None
 
-        video_url = ""
-        if len(videos) > 0:
-            link = videos[0].find_all("a")[0]['href']
-            link = urllib.parse.unquote(link).partition("src=")[2]
-            video_url = link
-        else:
-            return None
-        
+        print(html[130000:])
+
+        try:
+            video_url = re.search(
+                r"\"type\"\:\"video\"\,\"src\"\:\"(.+)\"",
+                html,
+            ).group(1)
+        except:
+            video_url = None
         
         if video_url is None:
             return

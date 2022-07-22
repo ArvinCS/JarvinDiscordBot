@@ -10,7 +10,7 @@ class InstagramCog(commands.Cog):
         self.bot = bot
 
     def findUser(self, id):
-        url = f"https://www.instagram.com/{id}"
+        url = f"https://www.instagram.com/{id}/"
         headers = {
             "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
         }
@@ -21,7 +21,7 @@ class InstagramCog(commands.Cog):
                 requests.get(url, headers=headers).text,
             ).group(1)
         )
-        print(data["entry_data"])
+        
         result =  {
             'photo': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["profile_pic_url_hd"],
             'username': data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["username"],
